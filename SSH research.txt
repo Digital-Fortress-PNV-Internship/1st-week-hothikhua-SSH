@@ -1,0 +1,56 @@
+1. Khái niệm SSH
+ - SSH là một giao thức mạng được mã hóa bảo mật, nó tạo ra kết nối bảo mật bảo mật (tạo ra
+ 1 đường hầm tách biệt với các dịch vụ khác để duy trì kết nối riêng tư giữa máy trạm và máy chủ)
+ trên một mang lưới không bảo mật.
+ - Cơ chế hoạt động (Có hình minh họa)
+  + (1)Một máy trạm từ chương trình SSH client yêu cầu kết nối với SSH server.
+  + (2)SSH Server khi nhận được yêu cầu kết nối được đưa ra thì máy chủ SSH Server gửi cho SSH
+  client một public key.
+  + (3)Dựa vào public key mà server trả về thì giữa client và server sẽ hình thành nên một
+  an toàn. Trên đường kết nối đó, dữ liệu được mã hóa. Khi có được đường truyền an toàn đó,
+  thì những gói tin gửi qua lại giữ client và server sẽ không bị giải mã bởi các chương trình
+  bắt các gói tin trên đường truyền này.
+2. Mục đích của việc kết nối SSH client tới SSH Server
+ - Nhằm mục đích để quản trị server bằng kết nối SSH.
+ - Giúp truyền dữ liệu lẫn nhau.
+3. Điều kiện để kết nối SSH client và SSH Server
+ - Máy chủ (VPS) phải chạy SSH Server, SSH Server chạy trên VPS và OpenSSH Server.
+ - Các máy trạm phải có chương trình SSH client.
+4. Thử kết nối SSH đến Server
+ - Thực hiện kết nối SSH Server đến Google Cloud Platform, AWS Management Console.
+5. Thiết lập Github SSH
+ Thực hiện truy cập Github thông qua SSH key
+ Thực hiện mở git bash here
+ 1) Tạo SSH Key
+
+    Tìm hiểu chi tiết về SSH, SSH Key thì xem tại Truy cập Server với SSH, ở đây coi như máy tính của bạn đã có cài Open SSH, hãy chạy tạo một thư mục ví dụ c:\sshforgithub, sau đó chạy cmd chuyển vào thư mục đó và gọi lệnh sau:
+
+    cd c:\sshforgithub
+    ssh-keygen -t rsa -f id_rsa
+    Khi nó hỏi Enter passphrase có thể nhấn Enter để trống cái này. Kết thúc lệnh đó thì trong c:\sshforgithub sẽ có SSH Key cho bạn gồm có public key là file id_rsa.pub và private key là file: id_rsa
+ 2) Thiết lập SSH public key cho GitHub
+
+    Mở file id_rsa.pub copy toàn bộ nội dung trong file đó vào clipboad, nội dung trong đó có dạng như:
+
+    ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDBMTYB/VzdxuVQXY81NUP4aZL4Urk+
+    tKPN9M12JQLzuTIuQL+eioECGL592xCja+NxsGDRW62rwQqMlJDZvF49EfdaWDT/FyhHfGcuy6laQHHEuv+kIVAPcT7JIRjUD5NMztvlaGvONnD0jMCdDjVmXmkNLJJuQCg
+    /lhLhSSiR4EhtLyWYfb4gs0Kl5qnVSs1pNCuGOR8St1WzdOoZVJm9QPPQN98NLX0PlZLrOnYsbP+ILUhuC1NmvY8zh8ebtikitoZq1OS5Mboo9d8EYenKAA19+FoBLT
+    +d1W0ofL0Sm5pAwxE5lva19drGIFZIfmQJ7nbB4SAmQ4kRb4fPJm8j dao xuan thu@DESKTOP-K03L9RD
+    Trở lại tài khoản GitHub truy cập vào Setting   
+
+    Ở màn hình mới, chọn mục có tên SSH and GPG key, sau đó chọn đến mục new SSH Key
+
+    Tại cửa sổ mới này, điền một tiêu đề SSH ở phần Title, còn phần key thì copy và past toàn bộ nội dung file id_rsa.pub vào. Cuối cùng bấn Add SSH Key để hoàn thành
+3) Thiết lập private SSH cho SSH/Git tại máy của bạn
+    Mở thư mục người dùng, ví dụ user đang logon máy Windows là XuanThuLab, thì thường thư mục đó là C:\Users\XuanThuLab, nếu đã cài đúng SSH cho Windows, thì sẽ có thư mục .ssh trong đó, mở thư mục đó ra, mở file config thêm vào đoạn cấu hình để chị ra host, user, private key khi truy cập SSH với nội dung như sau
+
+    Host GitHub.com - xuanthulabnet
+    User git
+    Hostname github.com
+    Port 22
+    PreferredAuthentications publickey
+    IdentityFile "C:\sshforgithub\id_rsa"
+    Nhớ thay phần màu vàng đúng thông tin của riêng bạn
+
+    Từ đây Git tại máy của bạn có thể truy cập thoải mái tới GitHub
+
